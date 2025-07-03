@@ -53,7 +53,7 @@ def plot_3d_plotly(matrix, vectors):
     return fig
 
 def transformation_visualizer():
-    st.title("🌐 Matrix Transformation Visualizer")
+    st.title("Matrix Transformation Visualizer")
     dim = st.selectbox("Select Dimension", [2, 3])
     matrix = []
     for i in range(dim):
@@ -70,7 +70,7 @@ def transformation_visualizer():
         vec = [cols[j].number_input(f"v{i+1}[{j+1}]", value=1.0 if i == j else 0.0, key=f"v_{i}_{j}") for j in range(dim)]
         vectors.append(np.array(vec))
     
-    if st.button("🚀 Apply Transformation"):
+    if st.button("Apply Transformation"):
         if dim == 2:
             plot_2d(matrix, vectors)
         else:
