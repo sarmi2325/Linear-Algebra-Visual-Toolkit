@@ -30,12 +30,12 @@ def pca_from_scratch(X, n_components=None):
     return X_reduced, eigen_vals
 
 def pca_visualizer():
-    st.title("🧠 PCA Visualizer (From Scratch using Eigen Decomposition)")
+    st.title("PCA Visualizer (From Scratch using Eigen Decomposition)")
 
     file = st.file_uploader("Upload CSV file", type=["csv"])
     if file:
         df = pd.read_csv(file)
-        st.write("📄 Data Preview", df.head())
+        st.write("Data Preview", df.head())
 
         numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
         features = st.multiselect("Select numeric columns", numeric_cols, default=numeric_cols)
@@ -89,10 +89,10 @@ def pca_visualizer():
             reduced_df = pd.DataFrame(X_reduced, columns=[f"PC{i+1}" for i in range(n_components)])
 
             # Downloadable CSV
-            st.subheader("⬇️ Download PCA-Reduced Data")
+            st.subheader("Download PCA-Reduced Data")
             csv = reduced_df.to_csv(index=False).encode('utf-8')
             st.download_button(
-                label="📥 Download Compressed CSV",
+                label="Download Compressed CSV",
                 data=csv,
                 file_name="pca_compressed.csv",
                 mime='text/csv'
