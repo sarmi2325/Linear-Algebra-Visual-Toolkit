@@ -3,7 +3,7 @@
 An interactive Streamlit web app that brings core linear algebra concepts to life — built from scratch using Python, NumPy, and Plotly.
 
 ## Live Demo
-[🔗 Your Streamlit Link Here](https://linear-algebra-visual-toolkit-pnrigscsyfkeaxxrkfhvgv.streamlit.app/)
+[🔗 Click Here](https://linear-algebra-visual-toolkit-pnrigscsyfkeaxxrkfhvgv.streamlit.app/)
 
 ---
 
