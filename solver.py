@@ -26,7 +26,7 @@ def gaussian_elimination(A, b):
     return x
 
 def linear_equation_solver():
-    st.title("🔢 Linear Equation Solver with Gaussian Elimination")
+    st.title("Linear Equation Solver with Gaussian Elimination")
     m = st.number_input("Number of Equations (m)", min_value=1, max_value=10, value=3)
     n = st.number_input("Number of Unknowns (n)", min_value=1, max_value=10, value=3)
 
@@ -49,7 +49,7 @@ def linear_equation_solver():
         b.append(val)
     b = np.array(b).reshape(-1, 1)
 
-    st.markdown("### 📊 Augmented Matrix [A | b]")
+    st.markdown("### Augmented Matrix [A | b]")
     # Display augmented matrix using LaTeX
     latex_matrix = r"\begin{bmatrix}"
     for i in range(m):
@@ -60,7 +60,7 @@ def linear_equation_solver():
     st.latex(latex_matrix)
 
 
-    if st.button("🧮 Solve"):
+    if st.button("Solve"):
         try:
             if m != n:
                 st.error("Only square systems (m = n) are supported.")
