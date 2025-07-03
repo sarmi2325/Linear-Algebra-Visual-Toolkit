@@ -1,0 +1,50 @@
+# ▶️ Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.eggs/
+*.log
+
+# ▶️ Jupyter Notebooks
+.ipynb_checkpoints/
+
+# ▶️ Environment
+.env
+.venv/
+venv/
+ENV/
+env.bak/
+env/
+*.env
+
+# ▶️ Streamlit
+.streamlit/secrets.toml
+.streamlit/config.toml
+
+# ▶️ Mac/Linux/Windows system files
+.DS_Store
+Thumbs.db
+
+# ▶️ VS Code and JetBrains
+.vscode/
+.idea/
+
+# ▶️ Data files
+*.csv
+*.xlsx
+*.h5
+*.pkl
+*.joblib
+
+# ▶️ Plots / Images (optional, keep only final assets)
+*.png
+*.jpg
+*.jpeg
+*.svg
+assets/raw/
+tmp/
+outputs/
+
