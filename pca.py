@@ -63,9 +63,7 @@ def pca_visualizer():
             
             # PCA from scratch
             X_reduced, eigen_vals = pca_from_scratch(X, n_components)
-            st.write("✅ PCA successfully executed.")
-            # Scree Plot (Explained Variance)
-            st.subheader("🔍 Explained Variance (Eigenvalues)")
+
             
             # Step 1: Normalize eigenvalues to get explained variance ratio
             total = np.sum(eigen_vals)
