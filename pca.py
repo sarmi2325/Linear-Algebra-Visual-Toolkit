@@ -74,8 +74,15 @@ def pca_visualizer():
             ax1.set_ylabel("Cumulative Explained Variance")
             st.pyplot(fig1)
 
-            # 📊 PCA Scatter Plot
-            st.subheader("📊 PCA Scatter Plot")
+            #explained variance and cumulative variance
+            explained_ratio = eigen_vals / np.sum(eigen_vals)
+            cumulative_ratio = np.cumsum(explained_ratio)
+
+            for i, (evr, cum) in enumerate(zip(explained_ratio, cumulative_ratio)):
+                  st.write(f"PC{i+1}: Explained = {evr*100:.2f}%, Cumulative = {cum*100:.2f}%")
+
+            #  PCA Scatter Plot
+            st.subheader("PCA Scatter Plot")
             if n_components >= 3:
                 fig = plt.figure()
                 ax = fig.add_subplot(111, projection='3d')
