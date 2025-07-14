@@ -5,31 +5,31 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 def pca_from_scratch(X, n_components=None):
-    # Step 1: Standardize using z-score
+    # Step 1: Manual Standardization (Z-score)
     mean = np.mean(X, axis=0)
     std = np.std(X, axis=0)
     X_standardized = (X - mean) / std
-    
-    # Step 2: Covariance matrix
+
+    # Step 2: Covariance Matrix
     cov_mat = np.cov(X_standardized, rowvar=False)
-    st.write("Covariance Matrix",cov_mat)
-    # Step 3: Eigen decomposition
+
+    # Step 3: Eigen Decomposition
     eigen_vals, eigen_vecs = np.linalg.eigh(cov_mat)
-    
-    # Step 4: Sort eigenvalues and vectors
+
+    # Step 4: Sort eigenvalues and eigenvectors
     sorted_idx = np.argsort(eigen_vals)[::-1]
     eigen_vals = eigen_vals[sorted_idx]
     eigen_vecs = eigen_vecs[:, sorted_idx]
-    st.write("Eigen Vectors",eigen_vecs)
-    st.write("Eigen Values",eigen_vals)
+
     # Step 5: Keep only top k eigenvectors
     if n_components is not None:
         eigen_vecs = eigen_vecs[:, :n_components]
-    
+
     # Step 6: Project the data
     X_reduced = np.dot(X_standardized, eigen_vecs)
-    
+
     return X_reduced, eigen_vals
+
 
 def pca_visualizer():
     st.title("PCA Visualizer (From Scratch using Eigen Decomposition)")
