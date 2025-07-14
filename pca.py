@@ -73,8 +73,20 @@ def pca_visualizer():
             cumulative_ratio = np.cumsum(explained_ratio)
             
             # Step 2: Print explained + cumulative variance for each PC
-            for i, (evr, cum) in enumerate(zip(explained_ratio, cumulative_ratio)):
-                st.write(f"PC{i+1}: Explained Variance = {evr*100:.2f}%, Cumulative = {cum*100:.2f}%")
+            st.subheader("Explained & Cumulative Variance Table")
+            
+            variance_table = pd.DataFrame({
+                "Principal Component": [f"PC{i+1}" for i in range(len(explained_ratio))],
+                "Explained Variance (%)": [f"{evr*100:.2f}" for evr in explained_ratio],
+                "Cumulative Variance (%)": [f"{cum*100:.2f}" for cum in cumulative_ratio]
+            })
+            
+            
+            st.dataframe(
+                variance_table.style.set_properties(**{'text-align': 'center'}),
+                use_container_width=True
+            )
+
             
             # Step 3: Scree plot
             fig1, ax1 = plt.subplots()
