@@ -12,15 +12,18 @@ def pca_from_scratch(X, n_components=None):
 
     # Step 2: Covariance Matrix
     cov_mat = np.cov(X_standardized, rowvar=False)
-
+    st.write("Covariance Matrix",cov_mat)
+    
     # Step 3: Eigen Decomposition
     eigen_vals, eigen_vecs = np.linalg.eigh(cov_mat)
-
+    
     # Step 4: Sort eigenvalues and eigenvectors
     sorted_idx = np.argsort(eigen_vals)[::-1]
     eigen_vals = eigen_vals[sorted_idx]
     eigen_vecs = eigen_vecs[:, sorted_idx]
-
+    st.write("Eigen Vectors",eigen_vecs)
+    st.write("Eigen Values",eigen_vals)
+    
     # Step 5: Keep only top k eigenvectors
     if n_components is not None:
         eigen_vecs = eigen_vecs[:, :n_components]
