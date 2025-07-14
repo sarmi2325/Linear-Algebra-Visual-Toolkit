@@ -5,11 +5,13 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 def pca_from_scratch(X, n_components=None):
-    # Step 1: Standardize
-    X_meaned = X - np.mean(X, axis=0)
+    # Step 1: Standardize using z-score
+    mean = np.mean(X, axis=0)
+    std = np.std(X, axis=0)
+    X_standardized = (X - mean) / std
     
     # Step 2: Covariance matrix
-    cov_mat = np.cov(X_meaned, rowvar=False)
+    cov_mat = np.cov(X_standardized, rowvar=False)
     st.write("Covariance Matrix",cov_mat)
     # Step 3: Eigen decomposition
     eigen_vals, eigen_vecs = np.linalg.eigh(cov_mat)
@@ -25,24 +27,29 @@ def pca_from_scratch(X, n_components=None):
         eigen_vecs = eigen_vecs[:, :n_components]
     
     # Step 6: Project the data
-    X_reduced = np.dot(X_meaned, eigen_vecs)
+    X_reduced = np.dot(X_standardized, eigen_vecs)
     
     return X_reduced, eigen_vals
 
 def pca_visualizer():
     st.title("PCA Visualizer (From Scratch using Eigen Decomposition)")
-
+    #uploading csv
     file = st.file_uploader("Upload CSV file", type=["csv"])
     if file:
+        #reading the csv
         df = pd.read_csv(file)
+        #preview csv
         st.write("Data Preview", df.head())
-
+        #selecting only numeric columns
         numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
         features = st.multiselect("Select numeric columns", numeric_cols, default=numeric_cols)
-
+        #numeric columns more than 1 
         if len(features) >= 2:
+            #drop missing values 
             X = df[features].dropna().values
+            #maximum numeric column= so accessing column
             max_components = X.shape[1]
+            
             n_components = st.number_input(
                 f"Number of Principal Components (max = {max_components})",
                 min_value=1,
@@ -50,11 +57,11 @@ def pca_visualizer():
                 value=min(2, max_components),
                 step=1
             )
-
+            
             # PCA from scratch
             X_reduced, eigen_vals = pca_from_scratch(X, n_components)
 
-            # 📈 Scree Plot
+            # Scree Plot
             st.subheader("🔍 Explained Variance (Eigenvalues)")
             fig1, ax1 = plt.subplots()
             total = np.sum(eigen_vals)
