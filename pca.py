@@ -64,22 +64,38 @@ def pca_visualizer():
             # PCA from scratch
             X_reduced, eigen_vals = pca_from_scratch(X, n_components)
 
-            # Scree Plot
+            # Scree Plot (Explained Variance)
             st.subheader("🔍 Explained Variance (Eigenvalues)")
-            fig1, ax1 = plt.subplots()
+            
+            # Step 1: Normalize eigenvalues to get explained variance ratio
             total = np.sum(eigen_vals)
-            explained = [(i / total) for i in eigen_vals]
-            ax1.plot(np.cumsum(explained), marker='o')
-            ax1.set_xlabel("Number of Components")
-            ax1.set_ylabel("Cumulative Explained Variance")
-            st.pyplot(fig1)
-
-            #explained variance and cumulative variance
-            explained_ratio = eigen_vals / np.sum(eigen_vals)
+            explained_ratio = eigen_vals / total
             cumulative_ratio = np.cumsum(explained_ratio)
-
+            
+            # Step 2: Print explained + cumulative variance for each PC
             for i, (evr, cum) in enumerate(zip(explained_ratio, cumulative_ratio)):
-                  st.write(f"PC{i+1}: Explained = {evr*100:.2f}%, Cumulative = {cum*100:.2f}%")
+                st.write(f"PC{i+1}: Explained Variance = {evr*100:.2f}%, Cumulative = {cum*100:.2f}%")
+            
+            # Step 3: Scree plot
+            fig1, ax1 = plt.subplots()
+            ax1.plot(np.arange(1, len(explained_ratio)+1), cumulative_ratio, marker='o', label='Cumulative')
+            ax1.bar(np.arange(1, len(explained_ratio)+1), explained_ratio, alpha=0.6, label='Individual')
+            
+            # Add horizontal reference lines
+            ax1.axhline(0.80, color='gray', linestyle='--', label='80% Threshold')
+            ax1.axhline(0.90, color='gray', linestyle='-.', label='90% Threshold')
+            
+            ax1.set_title("Scree Plot")
+            ax1.set_xlabel("Number of Components")
+            ax1.set_ylabel("Variance Ratio")
+            ax1.set_ylim(0, 1.05)
+            ax1.legend()
+            st.pyplot(fig1)
+            
+            #Recommendation based on 90% cumulative threshold
+            suggested_k = np.argmax(cumulative_ratio >= 0.90) + 1
+            st.success(f"Suggestion: Choose at least **{suggested_k} components** to retain ≥90% of the variance.")
+
 
             #  PCA Scatter Plot
             st.subheader("PCA Scatter Plot")
