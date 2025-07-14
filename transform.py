@@ -56,6 +56,7 @@ def transformation_visualizer():
     st.title("Matrix Transformation Visualizer")
     dim = st.selectbox("Select Dimension", [2, 3])
     matrix = []
+    #matrix input
     for i in range(dim):
         cols = st.columns(dim)
         row = [cols[j].number_input(f"A[{i+1},{j+1}]", value=1.0 if i == j else 0.0, key=f"A{i}{j}") for j in range(dim)]
@@ -64,12 +65,13 @@ def transformation_visualizer():
 
     st.markdown("### Vectors to Transform")
     vectors = []
+    #vector input
     n = st.slider("Number of vectors", 1, 3, 2)
     for i in range(n):
         cols = st.columns(dim)
         vec = [cols[j].number_input(f"v{i+1}[{j+1}]", value=1.0 if i == j else 0.0, key=f"v_{i}_{j}") for j in range(dim)]
         vectors.append(np.array(vec))
-    
+    #assigning plot for 2D and 3D
     if st.button("Apply Transformation"):
         if dim == 2:
             plot_2d(matrix, vectors)
