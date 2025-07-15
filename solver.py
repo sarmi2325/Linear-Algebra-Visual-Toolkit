@@ -55,9 +55,6 @@ def gaussian_elimination_steps(A, b, to_rref=False):
 def linear_equation_solver():
     st.title("Linear Equation Solver using Gaussian Elimination")
 
-    st.markdown("This tool uses Gaussian Elimination to solve systems of equations. "
-                "Supports step-by-step LaTeX output and both REF / RREF options.")
-
     m = st.number_input("Number of Equations (m)", min_value=1, max_value=10, value=3, help="m must equal n (square system) for a unique solution.")
     n = st.number_input("Number of Unknowns (n)", min_value=1, max_value=10, value=3, help="Choose the number of variables (n) to match equations (m).")
 
@@ -76,7 +73,7 @@ def linear_equation_solver():
     A = np.array(A)
 
     b = []
-    st.markdown("### ➕ Right-Hand Side Vector b")
+    st.markdown("### Right-Hand Side Vector b")
     cols_b = st.columns(m)
     for i in range(m):
         val = cols_b[i].number_input(f"b[{i+1}]", value=0.0, key=f"b_{i}")
