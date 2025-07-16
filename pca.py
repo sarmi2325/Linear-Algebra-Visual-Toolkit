@@ -46,7 +46,7 @@ def pca_svd(X, n_components=None):
 
 
 def pca_visualizer():
-    st.title("PCA Visualizer (From Scratch)")
+    st.title("PCA Visualizer")
 
     file = st.file_uploader("Upload CSV file", type=["csv"])
     if file:
