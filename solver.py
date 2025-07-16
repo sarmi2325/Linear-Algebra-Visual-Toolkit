@@ -53,12 +53,12 @@ def gaussian_elimination_steps(A, b, to_rref=False):
     return x, steps
 
 def linear_equation_solver():
-    st.title("Linear Equation Solver using Gaussian Elimination")
+    st.title("Linear Equation Solver")
 
     m = st.number_input("Number of Equations (m)", min_value=1, max_value=10, value=3, help="m must equal n (square system) for a unique solution.")
     n = st.number_input("Number of Unknowns (n)", min_value=1, max_value=10, value=3, help="Choose the number of variables (n) to match equations (m).")
 
-    ref_type = st.selectbox("Form to Display", ["REF (Row Echelon)", "RREF (Reduced Row Echelon)"],
+    ref_type = st.selectbox("Form to Display", ["REF (Row Echelon) - Gaussian Elimination", "RREF (Reduced Row Echelon) - Gauss-Jordan elimination"],
                             help="Choose whether to stop at upper triangular form (REF) or fully reduce to RREF.")
 
     A = []
