@@ -13,16 +13,16 @@ This toolkit includes 3 self-contained modules that let users interact with line
 
 | Module | Description |
 |--------|-------------|
-|  **Linear Equation Solver** | Solves systems of linear equations using Gaussian Elimination |
+|  **Linear Equation Solver** | Solves systems of linear equations using Gaussian Elimination and Gauss Jordan Elimination |
 |  **Matrix Transformation Visualizer** | Visualizes how matrices transform vectors in 2D and 3D space |
-|  **PCA Visualizer (From Scratch)** | Performs Principal Component Analysis using eigen decomposition, no scikit-learn used |
+|  **PCA Visualizer** | Performs Principal Component Analysis using eigen decomposition and SVD |
 
 ---
 
 ## 🛠 Features
 
 ### 1. Linear Equation Solver
-- Solve m × n systems using Gaussian elimination
+- Solve m × n systems using Gaussian elimination and Gauss Jordan Elimination
 - Displays augmented matrix in LaTeX
 - Handles singular matrices gracefully
 
@@ -33,7 +33,7 @@ This toolkit includes 3 self-contained modules that let users interact with line
 
 ### 3. PCA Visualizer (From Scratch)
 - Manual standardization
-- Covariance matrix + eigen decomposition
+- Covariance matrix + eigen decomposition and SVD
 - Scree plot, 2D/3D PCA scatter
 - Download compressed CSV
 
