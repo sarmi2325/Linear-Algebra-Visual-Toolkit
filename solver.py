@@ -3,21 +3,24 @@ import streamlit as st
 import sympy as sp
 
 def gaussian_elimination_steps(A, b, to_rref=False):
+    #converting into float for prevent division errors
     A = A.astype(float)
     b = b.astype(float)
     steps = []  # Store LaTeX steps
-
+    #A should be a square matrix
     m, n = A.shape
     if m != n:
         raise ValueError("Only square systems (m = n) can be solved.")
-
+    #loop through columns, find max absolute of each column
     for i in range(n):
         max_row = np.argmax(abs(A[i:, i])) + i
+        #the pivot should not be zero, for maintaining the non-singularity
         if A[max_row, i] == 0:
             raise ValueError("Matrix is singular or has no unique solution.")
+        #swap the rows,that max_row should be in diagonal
         A[[i, max_row]] = A[[max_row, i]]
         b[[i, max_row]] = b[[max_row, i]]
-
+        #make every element below pivot to zero
         for j in range(i + 1, n):
             factor = A[j, i] / A[i, i]
             A[j, i:] -= factor * A[i, i:]
