@@ -5,7 +5,8 @@ import sympy as sp
 def gaussian_elimination_steps(A, b, to_rref=False):
     A = A.astype(float)
     b = b.astype(float)
-    steps = []
+    ref_steps = []
+    rref_steps = []
 
     m, n = A.shape
     if m != n:
@@ -28,43 +29,47 @@ def gaussian_elimination_steps(A, b, to_rref=False):
         latex_step = r"\text{REF Step " + f"{i+1}" + r"}: \quad \begin{bmatrix}" + \
             r"\\ ".join([" & ".join([f"{num:.2f}" for num in row]) for row in aug]) + \
             r"\end{bmatrix}"
-        steps.append(latex_step)
+        ref_steps.append(latex_step)
 
-    # Gauss-Jordan elimination (RREF)
-    if to_rref:
+    # Stop here if only REF requested
+    if not to_rref:
+        x = np.zeros(n)
         for i in range(n-1, -1, -1):
-            A[i] = A[i] / A[i, i]
-            b[i] = b[i] / A[i, i]
-            for j in range(i):
-                factor = A[j, i]
-                A[j] -= factor * A[i]
-                b[j] -= factor * b[i]
+            x[i] = (b[i] - np.dot(A[i, i+1:], x[i+1:])) / A[i, i]
+        return x, ref_steps
 
-            aug = np.hstack((A, b))
-            latex_step = r"\text{RREF Step " + f"{n - i}" + r"}: \quad \begin{bmatrix}" + \
-                r"\\ ".join([" & ".join([f"{num:.2f}" for num in row]) for row in aug]) + \
-                r"\end{bmatrix}"
-            steps.append(latex_step)
-
-    # Back-substitution
-    x = np.zeros(n)
+    # Continue to Gauss-Jordan elimination (RREF)
     for i in range(n-1, -1, -1):
-        x[i] = (b[i] - np.dot(A[i, i+1:], x[i+1:])) / A[i, i]
+        divisor = A[i, i]
+        A[i] = A[i] / divisor
+        b[i] = b[i] / divisor
+        for j in range(i):
+            factor = A[j, i]
+            A[j] -= factor * A[i]
+            b[j] -= factor * b[i]
 
-    return x, steps
+        aug = np.hstack((A, b))
+        latex_step = r"\text{RREF Step " + f"{n - i}" + r"}: \quad \begin{bmatrix}" + \
+            r"\\ ".join([" & ".join([f"{num:.2f}" for num in row]) for row in aug]) + \
+            r"\end{bmatrix}"
+        rref_steps.append(latex_step)
+
+    x = b.flatten()  # After RREF, x is directly b
+    return x, rref_steps
+
 
 def linear_equation_solver():
     st.title("Linear Equation Solver (Gaussian / Gauss-Jordan Elimination)")
 
-    m = st.number_input("Number of Equations (m)", min_value=1, max_value=10, value=3)
-    n = st.number_input("Number of Unknowns (n)", min_value=1, max_value=10, value=3)
+    m = st.number_input("Number of Equations (m)", min_value=1, max_value=10, value=2)
+    n = st.number_input("Number of Unknowns (n)", min_value=1, max_value=10, value=2)
 
     ref_type = st.selectbox("Form to Display", 
                             ["REF (Row Echelon) - Gaussian Elimination", 
                              "RREF (Reduced Row Echelon) - Gauss-Jordan elimination"])
 
     A = []
-    st.markdown("###Coefficient Matrix A")
+    st.markdown("### Coefficient Matrix A")
     for i in range(m):
         row = []
         cols = st.columns(n)
@@ -97,9 +102,9 @@ def linear_equation_solver():
             if m != n:
                 st.error("❌ Only square systems (m = n) are supported.")
             else:
-                rref = (ref_type == "RREF (Reduced Row Echelon) - Gauss-Jordan elimination")
-                x, steps = gaussian_elimination_steps(A.copy(), b.copy(), to_rref=rref)
-                
+                to_rref = (ref_type == "RREF (Reduced Row Echelon) - Gauss-Jordan elimination")
+                x, steps = gaussian_elimination_steps(A.copy(), b.copy(), to_rref=to_rref)
+
                 st.success("✅ Solution Found:")
                 st.latex(r"x = " + sp.latex(sp.Matrix(x.reshape(-1, 1))))
 
