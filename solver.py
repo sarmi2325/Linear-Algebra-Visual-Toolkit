@@ -141,9 +141,11 @@ def linear_equation_solver():
             st.latex(r"x = " + sp.latex(sp.Matrix(x.reshape(-1, 1))))
 
             with st.expander("Step-by-step Matrix Transformation"):
-                for i, step in enumerate(steps):
-                    st.markdown(f"**Step {i//2 + 1 if i % 2 else ''}:**")
-                    st.latex(step)
+                for i in range(0, len(steps), 2):
+                    st.markdown(f"### Step {i//2 + 1}")
+                    st.markdown(f"$$ {steps[i]} $$")         
+                    st.markdown(f"$$ {steps[i+1]} $$")      
+
 
         except ValueError as e:
             st.error(f"⚠️ {str(e)}")
