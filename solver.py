@@ -2,60 +2,50 @@ import numpy as np
 import streamlit as st
 import sympy as sp
 
-def gaussian_elimination_steps(A, b, to_rref=False):
+def gaussian_elimination_detailed(A, b):
     A = A.astype(float)
     b = b.astype(float)
-    ref_steps = []
-    rref_steps = []
+    steps = []
 
     m, n = A.shape
     if m != n:
         raise ValueError("Only square systems (m = n) can be solved.")
 
-    # Forward elimination (REF)
     for i in range(n):
+        # Row swap if needed
         max_row = np.argmax(abs(A[i:, i])) + i
         if A[max_row, i] == 0:
             raise ValueError("Matrix is singular or has no unique solution.")
-        A[[i, max_row]] = A[[max_row, i]]
-        b[[i, max_row]] = b[[max_row, i]]
+        if max_row != i:
+            A[[i, max_row]] = A[[max_row, i]]
+            b[[i, max_row]] = b[[max_row, i]]
+            steps.append(rf"\text{{Swap Row {i+1} $\leftrightarrow$ Row {max_row+1}}}")
+            steps.append(format_augmented_matrix(A, b))
 
+        # Normalize pivot row
+        pivot = A[i, i]
+        if pivot != 1:
+            A[i] = A[i] / pivot
+            b[i] = b[i] / pivot
+            steps.append(rf"\text{{R_{i+1} = R_{i+1} / {pivot:.2f}}}")
+            steps.append(format_augmented_matrix(A, b))
+
+        # Eliminate below
         for j in range(i + 1, n):
-            factor = A[j, i] / A[i, i]
-            A[j, i:] -= factor * A[i, i:]
-            b[j] -= factor * b[i]
-
-        aug = np.hstack((A, b))
-        latex_step = r"\text{REF Step " + f"{i+1}" + r"}: \quad \begin{bmatrix}" + \
-            r"\\ ".join([" & ".join([f"{num:.2f}" for num in row]) for row in aug]) + \
-            r"\end{bmatrix}"
-        ref_steps.append(latex_step)
-
-    # Stop here if only REF requested
-    if not to_rref:
-        x = np.zeros(n)
-        for i in range(n-1, -1, -1):
-            x[i] = (b[i] - np.dot(A[i, i+1:], x[i+1:])) / A[i, i]
-        return x, ref_steps
-
-    # Continue to Gauss-Jordan elimination (RREF)
-    for i in range(n-1, -1, -1):
-        divisor = A[i, i]
-        A[i] = A[i] / divisor
-        b[i] = b[i] / divisor
-        for j in range(i):
             factor = A[j, i]
-            A[j] -= factor * A[i]
-            b[j] -= factor * b[i]
+            if abs(factor) > 1e-8:  # Only eliminate if factor is non-zero
+                A[j] -= factor * A[i]
+                b[j] -= factor * b[i]
+                steps.append(rf"\text{{R_{j+1} = R_{j+1} - ({factor:.2f}) × R_{i+1}}}")
+                steps.append(format_augmented_matrix(A, b))
 
-        aug = np.hstack((A, b))
-        latex_step = r"\text{RREF Step " + f"{n - i}" + r"}: \quad \begin{bmatrix}" + \
-            r"\\ ".join([" & ".join([f"{num:.2f}" for num in row]) for row in aug]) + \
-            r"\end{bmatrix}"
-        rref_steps.append(latex_step)
+    # Back-substitution
+    x = np.zeros(n)
+    for i in range(n-1, -1, -1):
+        x[i] = (b[i] - np.dot(A[i, i+1:], x[i+1:])) / A[i, i]
 
-    x = b.flatten()  # After RREF, x is directly b
-    return x, rref_steps
+    return x, steps
+
 
 
 def linear_equation_solver():
